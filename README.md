@@ -6,5 +6,6 @@ Initial code ultrasonic_2.py based on http://www.raspberrypi-spy.co.uk/2013/01/u
 
 ## Todo
 
+* Write cronjob to periodically "git add data; git commit; git push"
 * Only have this run during the day
 * Next step: only have this run when I'm actually behind my desk (e.g. using separate sonar pointing towards me)
