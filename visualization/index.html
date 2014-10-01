@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>D3 primer</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style type="text/css">
+        .chart1 {
+            fill: green;
+            opacity: 0.1;
+        }
+        .chart2 {
+            fill: blue;
+            opacity: 0.1;
+        }
+        
+    </style>
+
+</head>
+
+<body>
+    <div class="row">
+        <div class="span2">
+            <b>:: Chart 1 ::</b><br/>
+            Folded back per day
+        </div>
+        <div class="span10" id="area1"></div>
+    </div>
+    <div class="row">
+        <div class="span2">
+            <b>:: Chart 2 ::</b><br/>
+            Full overview across time
+        </div>
+        <div class="span10" id="area2"></div>
+    </div>
+
+    <script>
+        var w = 400;
+        var h = 50;
+        var margin = {left: 10, right: 10, top: 10, bottom: 10}
+        var chart1 = d3.select("#area1")
+                    .append("svg")
+                        .attr("width", w + margin.left + margin.right)
+                        .attr("height", h + margin.top + margin.bottom)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        var chart2 = d3.select("#area2")
+                    .append("svg")
+                        .attr("width", w + margin.left + margin.right)
+                        .attr("height", h + margin.top + margin.bottom)
+                    .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+        var xChart1 = function(daynumber,hour,minute) {
+            return ((273-parseInt(daynumber))*720+(parseInt(hour) - 8)*60 + parseInt(minute))/3
+        }
+
+        var xChart2 = function(hour,minute) {
+            return ((parseInt(hour) - 8)*60 + parseInt(minute))/3
+        }
+        
+        d3.csv("../distance_log.csv", function(d) {
+            chart1.selectAll(".chart1")
+                    .data(d)
+                    .enter()
+                    .append("circle")
+                        .attr("r", 3)
+                        .attr("cx", function(d,i) { return xChart1(d.daynumber,d.hour,d.minute) })
+                        .attr("cy", function(d) { return h-d.distance/3 })
+                        .attr("class","chart1")
+        })
+        
+        d3.csv("../distance_log.csv", function(d) {
+            chart2.selectAll(".chart2")
+                    .data(d)
+                    .enter()
+                    .append("circle")
+                        .attr("r", 3)
+                        .attr("cx", function(d,i) { return xChart2(d.hour,d.minute) })
+                        .attr("cy", function(d) { return h-d.distance/3 })
+                        .attr("class","chart2")              
+
+        })
+	</script>
+</body>
+
+</html>
