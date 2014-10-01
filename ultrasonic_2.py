@@ -37,6 +37,7 @@ def measure():
 
   elapsed = stop-start
   distance = (elapsed * 34300)/2 # 34300 = speed of sound in cm/s
+  distance = 370 - distance # room is 370 cm high and we're measuring to the ceiling instead of the floor
 
   return distance
 
@@ -65,7 +66,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO_TRIGGER = 23
 GPIO_ECHO    = 24
 
-print "#dayofweek,year,month,day,daynumber,hour,minute,second,distance"
+#print "#dayofweek,year,month,day,daynumber,hour,minute,second,distance"
 
 # Set pins as output and input
 GPIO.setup(GPIO_TRIGGER,GPIO.OUT)  # Trigger
@@ -81,19 +82,16 @@ GPIO.output(GPIO_TRIGGER, False)
 # messages.
 try:
 
-  while True:
-
-    distance = "%.1f" % measure_average()
-    dayofweek = time.strftime("%a")
-    year = time.strftime("%Y")
-    month = time.strftime("%m")
-    day = time.strftime("%d")
-    daynumber = time.strftime("%j")
-    hour = time.strftime("%H")
-    minute = time.strftime("%M")
-    second = time.strftime("%S")
-    print ','.join([dayofweek,year,month,day,daynumber,hour,minute,second,distance])
-    time.sleep(1)
+  distance = "%.1f" % measure_average()
+  dayofweek = time.strftime("%a")
+  year = time.strftime("%Y")
+  month = time.strftime("%m")
+  day = time.strftime("%d")
+  daynumber = time.strftime("%j")
+  hour = time.strftime("%H")
+  minute = time.strftime("%M")
+  second = time.strftime("%S")
+  print ','.join([dayofweek,year,month,day,daynumber,hour,minute,second,distance])
 
 except KeyboardInterrupt:
   # User pressed CTRL-C
